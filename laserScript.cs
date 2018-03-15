@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class laserScript : MonoBehaviour {
 
     // Use this for initialization
-    
+    ParticleSystem part;
     public GameObject lastShipHit;
     public GameObject explosionEnemy;
     Text scoreText;
@@ -15,17 +15,20 @@ public class laserScript : MonoBehaviour {
     int counterShip;
     AudioSource explodeSFX;
     GameObject explosion;
+    AudioSource laserSFX;
     void Start () {
         canvas = GameObject.Find("Canvas");
         scoreText = canvas.GetComponentInChildren<Text>();
         explosion = GameObject.Find("explosionsfx");
         explodeSFX = explosion.GetComponent<AudioSource>();
+        laserSFX = GetComponent<AudioSource>();
+        part = GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update ()
     {
-        
+            laserSFX.Play();
     }
 
     void AddScore()
