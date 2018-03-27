@@ -16,6 +16,8 @@ public class laserScript : MonoBehaviour {
     AudioSource explodeSFX;
     GameObject explosion;
     AudioSource laserSFX;
+    int EnemyHealth = 2;
+    Text HealthText;
     void Start () {
         canvas = GameObject.Find("Canvas");
         scoreText = canvas.GetComponentInChildren<Text>();
@@ -23,11 +25,13 @@ public class laserScript : MonoBehaviour {
         explodeSFX = explosion.GetComponent<AudioSource>();
         laserSFX = GetComponent<AudioSource>();
         part = GetComponent<ParticleSystem>();
+        HealthText = canvas.transform.Find("HealthText").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update ()
     {
+        if(!laserSFX.isPlaying)
             laserSFX.Play();
     }
 
@@ -43,16 +47,21 @@ public class laserScript : MonoBehaviour {
         {
             if(lastShipHit == other)
             {
-                // increment if the same ship was hit
+                // increment if the same ship was hits
                 counterShip++;
+                if(EnemyHealth > 0)
+                    EnemyHealth -= 1;
+                HealthText.text = "Enemy Health: " + EnemyHealth;
             }
             else
             {
                 //0 if the last ship hit wasn't the previous one
                 counterShip = 0;
+                EnemyHealth = 2;
+                HealthText.text = "Enemy Health: " + EnemyHealth;
             }
 
-            if(counterShip > 3)
+            if (counterShip > 1)
             {
                 Instantiate(Resources.Load("explosionEnemy"), other.transform.position, other.transform.rotation);
                 AddScore();
@@ -61,7 +70,8 @@ public class laserScript : MonoBehaviour {
                     explodeSFX.Play();
                 }
                 Destroy(other);
-                Destroy(other.transform.parent.gameObject);
+                                Destroy(other.transform.parent.gameObject);
+
             }
         }
         lastShipHit = other;
